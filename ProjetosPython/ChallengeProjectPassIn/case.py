@@ -1,0 +1,12 @@
+
+class AlgumaCoisa:
+    def __enter__(self):
+        print('Estou entrando!')
+        
+    # valores de exceções => exc_type, exc_value, exc_tb
+    def __exit__(self, exc_type, exc_value, exc_tb):
+        print('Estou saindo!')
+    
+with AlgumaCoisa() as ola:
+    print('Estou no meio')
+    

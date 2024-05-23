@@ -1,2 +1,3 @@
-# RepositoryPythonStudy
-Python's repository for study
+# Python
+place to story study material about python
+

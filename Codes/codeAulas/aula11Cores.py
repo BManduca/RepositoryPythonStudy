@@ -1,0 +1,8 @@
+print('\033[31;43mOlá Mundo!')
+print('{}Teste'.format('\033[0;30;41m'))
+print('{}Teste2'.format('\033[4;33;44m'))
+print('{}Teste3'.format('\033[1;35;43m'))
+print('{}Teste4'.format('\033[30;42m'))
+print('{}Teste5'.format('\033[m'))
+print('{}Teste6'.format('\033[7;30m'))
+print('\033[1;31;43mOlá, Mundo!\033[m')

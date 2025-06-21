@@ -1,4 +1,8 @@
-from pymongo import collection
+import os
+from pymongo import MongoClient
+from dotenv import load_dotenv
+
+load_dotenv()
 
 colors = (
     '\033[0m', # 0 - SEM COR
@@ -27,10 +31,11 @@ def imprimirLinha(cor=0):
 
 
 def get_database():
-    from pymongo import MongoClient
-    import pymongo
+    CONNECTION_STRING = os.getenv('MONGO_URI')
 
-    CONNECTION_STRING = "mongodb+srv://manduca:xmd8Xvu1XCcoIz6Q@mydatabase.8vdqilo.mongodb.net/"
+    if not CONNECTION_STRING:
+        imprimirMensagem('Erro: MONGO_URI não está definido no .env', 1)
+        exit(1)
 
     # aqui acontece a nossa conexao com o mongodb
     client = MongoClient(CONNECTION_STRING)
@@ -45,21 +50,24 @@ def get_database():
 dbname = get_database()
 collection_name = dbname["itens_mandDatabase"]
 
-# distinct -> exibe os dados sem repetição
-# detalhes_items = collection_name.distinct("nome_item")
 
-#limit -> limita a quantidade de dados a serem mostrados
-# detalhes_items = collection_name.find({'categoria':'Físico'}).limit(2)
+# para atualizar utilizamos a palavra reservada set, que faz o update das informações
+# collection_name.update_many(
+#     {"desconto_maximo":"50%"},
+#     {"$set":{"desconto_maximo":"55%"}}
+# )
 
-#skip -> 'pular'a quantidade de itens definido pelo usuario e mostrar somente os itens resultantes dessa ação em tela
-detalhes_items = collection_name.find({}, {"nome_item", "desconto_maximo"}).skip(2)
+# na seguinte forma 
+collection_name.update_one(
+    {"nome_item":{"$regex":"Drone"}}, {"$set":{"desconto_maximo":"100%"}}
+)
 
-# detalhes_items = collection_name.find()
+imprimirLinha20(4)
+imprimirMensagem("Dados atualizados com sucesso!", 4)
+imprimirLinha20(4)
 
-print(' ')
-# imprimirLinha(3)
+detalhes_items = collection_name.find()
+
+print()
 for item in detalhes_items:
-    # print(f'{item:^16}')
     print(item)
-# imprimirLinha(3)
-print(' ')

@@ -1,3 +1,9 @@
+import os
+from pymongo import MongoClient
+from dotenv import load_dotenv
+
+load_dotenv()
+
 colors = (
     '\033[0m', # 0 - SEM COR
     '\033[0;31m', # 1 - VERMELHO
@@ -9,27 +15,30 @@ colors = (
 )
 
 def imprimirMensagem(msg, cor=0):
-  print(colors[cor], end='')
-  print(f'{msg:^60}')
-  print(colors[0], end='')
+    print(colors[cor], end='')
+    print(f'{msg:^60}')
+    print(colors[0], end='')
 
 def imprimirLinha(cor=0):
-  print(colors[cor], end='')
-  print('-=-'*20)
-  print(colors[0], end='')
+    print(colors[cor], end='')
+    print('-=-'*20)
+    print(colors[0], end='')
 
 def get_database():
-  from pymongo import MongoClient
+    CONNECTION_STRING = os.getenv('MONGO_URI')
 
-  CONNECTION_STRING = 'mongodb+srv://manduca:xmd8Xvu1XCcoIz6Q@mydatabase.8vdqilo.mongodb.net/'
+    if not CONNECTION_STRING:
+        imprimirMensagem('Erro: MONGO_URI não está definido no .env', 1)
+        exit(1)
 
-  client = MongoClient(CONNECTION_STRING)
+    # aqui acontece a nossa conexao com o mongodb
+    client = MongoClient(CONNECTION_STRING)
 
-  imprimirLinha(2)
-  imprimirMensagem('CONECTADO COM SUCESSO!', 2)
-  imprimirLinha(2)
+    imprimirLinha(2)
+    imprimirMensagem('CONECTADO COM SUCESSO!', 2)
+    imprimirLinha(2)
 
-  return client['mandDatabase']
+    return client['mandDatabase']
 
 dbname = get_database()
 collection_manga = dbname['mangas']

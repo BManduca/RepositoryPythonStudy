@@ -1,6 +1,7 @@
-from pymongo import collection
-import time
+import os
 from os import system
+import time
+from pymongo import collection
 
 colors = (
     '\033[0m', # 0 - SEM COR
@@ -51,8 +52,15 @@ def imprimirLinha28(cor=0):
 def get_database():
     from pymongo import MongoClient
 
-    CONNECTION_STRING = "mongodb+srv://manduca:xmd8Xvu1XCcoIz6Q@mydatabase.8vdqilo.mongodb.net/"
+    CONNECTION_STRING = os.getenv('MONGO_URI')
 
+    if not CONNECTION_STRING:
+        imprimirLinha28(1)
+        printTextCentralized('Erro: MONGO_URI não está definido no .env', 1)
+        imprimirLinha28(1)
+        exit(1)
+
+    # aqui acontece a nossa conexao com o mongodb
     client = MongoClient(CONNECTION_STRING)
 
     print(' ')
@@ -87,10 +95,9 @@ def showMenu():
     imprimirLinha28(3)
 
 
-"""
-This Python function allows the user to input a specified number of key-value pairs to create a
-document and store it in a MongoDB collection.
-"""
+
+# This Python function allows the user to input a specified number of key-value pairs to create a
+# document and store it in a MongoDB collection.
 def registerDocument():
     dbname = get_database()
     collection_name = dbname['exerciseListDatabase']
@@ -114,10 +121,9 @@ def registerDocument():
     system('clear')
 
 
-"""
-This Python function retrieves and displays documents from a MongoDB collection with a styled
-message for each item, and then clears the screen after a delay.
-"""
+
+# This Python function retrieves and displays documents from a MongoDB collection with a styled
+# message for each item, and then clears the screen after a delay.
 def showDocuments():
     dbname = get_database()
     collection_name = dbname['exerciseListDatabase']
@@ -178,7 +184,7 @@ def deleteAllCollectionDB():
     else:
         collection_name.drop()
         dbname.drop_collection()
-        printTextCentralized('DELETANDO COLEÇÃO...')
+        printTextCentralized('DELETANDO COLEÇÃO...', 80, 1)
         print()
         printTextCentralized('3', 80, 2)
         time.sleep(2)

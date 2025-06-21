@@ -1,4 +1,8 @@
-from pymongo import collection
+import os
+from pymongo import MongoClient
+from dotenv import load_dotenv
+
+load_dotenv()
 
 colors = (
     '\033[0m', # 0 - SEM COR
@@ -27,10 +31,12 @@ def imprimirLinha(cor=0):
 
 
 def get_database():
-    from pymongo import MongoClient
-    import pymongo
 
-    CONNECTION_STRING = "mongodb+srv://manduca:xmd8Xvu1XCcoIz6Q@mydatabase.8vdqilo.mongodb.net/"
+    CONNECTION_STRING = os.getenv('MONGO_URI')
+
+    if not CONNECTION_STRING:
+        imprimirMensagem('Erro: MONGO_URI não está definido no .env', 1)
+        exit(1)
 
     # aqui acontece a nossa conexao com o mongodb
     client = MongoClient(CONNECTION_STRING)

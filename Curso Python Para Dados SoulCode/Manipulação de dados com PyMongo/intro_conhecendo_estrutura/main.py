@@ -10,8 +10,6 @@ colors = (
     '\033[0;36m', # 6 - BRANCO
 )
 
-# mongodb+srv://manduca:xmd8Xvu1XCcoIz6Q@mydatabase.8vdqilo.mongodb.net/
-
 def imprimirMensagem(msg, cor=0):
     print(colors[cor], end='')
     print(f'{msg:^60}')
